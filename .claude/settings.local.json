@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm create:*)",
+      "Bash(npm --version)",
+      "Bash(corepack enable:*)",
+      "Bash(corepack prepare:*)",
+      "Bash(npm install:*)",
+      "Bash(rsync -av --exclude='.git' --exclude='CLAUDE.md' --exclude='.next' /tmp/meal-prep-scaffold/app/ /Users/williamchristie/Documents/Claude/Projects/meal-prep-tool-V2/)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm approve-builds:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm dlx:*)"
+    ]
+  }
+}
