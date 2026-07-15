@@ -65,7 +65,7 @@ export interface FullUserProfile {
 }
 
 // ──────────────────────────────────────────────
-// Recipe types — Phase 2
+// Recipe types - Phase 2
 // ──────────────────────────────────────────────
 
 export interface RecipeIngredient {
@@ -148,7 +148,7 @@ export interface ScaledIngredient extends RecipeIngredient {
 }
 
 // ──────────────────────────────────────────────
-// Meal Plan types — Phase 3
+// Meal Plan types - Phase 3
 // ──────────────────────────────────────────────
 
 export type MealPlanStatus = 'GENERATING' | 'READY' | 'FAILED'
@@ -192,7 +192,7 @@ export interface WeekMacroSummary {
 }
 
 // ──────────────────────────────────────────────
-// Shopping List types — Phase 4
+// Shopping List types - Phase 4
 // ──────────────────────────────────────────────
 
 export type IngredientCategory =

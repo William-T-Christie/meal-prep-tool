@@ -1,8 +1,8 @@
-# Meal Prep Tool V2 -- Project Brief
+# Meal Prep Tool V2 - Project Brief
 
 ## Vision
 
-A web application that makes weekly meal planning effortless. Users define their dietary profile once (allergies, preferences, macros, budget, time constraints), and the app generates personalized meal plans with auto-scaled recipes, consolidated shopping lists, and step-by-step cooking instructions. The guiding principle is **maximum automation, minimum friction**.
+A web application for weekly meal planning. Users define their dietary profile once (allergies, preferences, macros, budget, time constraints), and the app generates personalized meal plans with auto-scaled recipes, consolidated shopping lists, and step-by-step cooking instructions. The goal is to take the tedious planning work off your plate.
 
 ---
 

@@ -76,7 +76,7 @@ model VerificationToken {
 }
 
 // ──────────────────────────────────────────────
-// Domain models — Phase 1
+// Domain models - Phase 1
 // ──────────────────────────────────────────────
 
 model Profile {
@@ -214,7 +214,7 @@ model KitchenEquipment {
 }
 
 // ──────────────────────────────────────────────
-// Recipe models — Phase 2
+// Recipe models - Phase 2
 // ──────────────────────────────────────────────
 
 enum Difficulty {
@@ -309,7 +309,7 @@ model RecipeNutrition {
 }
 
 // ──────────────────────────────────────────────
-// Meal Plan models — Phase 3
+// Meal Plan models - Phase 3
 // ──────────────────────────────────────────────
 
 enum MealPlanStatus {

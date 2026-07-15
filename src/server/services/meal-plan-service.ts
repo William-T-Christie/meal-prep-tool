@@ -128,7 +128,7 @@ export async function generateMealPlan(userId: string, weekStartDate: Date) {
 
   // Format date for title and collision suffix
   const dateStr = weekStartDate.toISOString().split('T')[0] ?? 'plan'
-  const title = `Meal Plan — Week of ${dateStr}`
+  const title = `Meal Plan - Week of ${dateStr}`
 
   // Create plan in GENERATING status
   const mealPlan = await prisma.mealPlan.create({

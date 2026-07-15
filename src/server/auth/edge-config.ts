@@ -3,7 +3,7 @@ import GitHub from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
 
 /**
- * Edge-safe auth config — no Prisma adapter, no Node.js modules.
+ * Edge-safe auth config - no Prisma adapter, no Node.js modules.
  * Used by middleware for route protection.
  */
 export const edgeAuthConfig: NextAuthConfig = {

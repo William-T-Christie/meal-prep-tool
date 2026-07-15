@@ -32,19 +32,19 @@ export function StepBasics({ data, onChange }: StepBasicsProps) {
           <div className="flex items-center gap-2">
             <RadioGroupItem value="BEGINNER" id="beginner" />
             <Label htmlFor="beginner" className="cursor-pointer">
-              Beginner — I'm learning the basics
+              Beginner - I'm learning the basics
             </Label>
           </div>
           <div className="flex items-center gap-2">
             <RadioGroupItem value="INTERMEDIATE" id="intermediate" />
             <Label htmlFor="intermediate" className="cursor-pointer">
-              Intermediate — I can follow most recipes
+              Intermediate - I can follow most recipes
             </Label>
           </div>
           <div className="flex items-center gap-2">
             <RadioGroupItem value="ADVANCED" id="advanced" />
             <Label htmlFor="advanced" className="cursor-pointer">
-              Advanced — I'm comfortable improvising
+              Advanced - I'm comfortable improvising
             </Label>
           </div>
         </RadioGroup>

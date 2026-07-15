@@ -9,12 +9,12 @@ Rules:
 - Generate exactly 28 meals: 4 meals per day (Breakfast, Lunch, Dinner, Snack) for 7 days (Monday through Sunday)
 - Every recipe MUST include accurate nutrition information (calories, protein, carbs, fat per serving)
 - Recipes should be practical, realistic, and use commonly available ingredients
-- Respect ALL dietary restrictions and allergies strictly — never include allergens
+- Respect ALL dietary restrictions and allergies strictly - never include allergens
 - Prefer cuisines the user loves/likes, avoid cuisines they dislike
 - Stay within time constraints for each meal type
 - Aim to meet macro goals when specified
 - Suggest ingredient overlap between meals to reduce waste and shopping cost
-- Vary recipes throughout the week — avoid repeating the same dish
+- Vary recipes throughout the week - avoid repeating the same dish
 - Match recipe difficulty to the user's cooking skill level
 - Set baseServings to the household size
 
@@ -45,7 +45,7 @@ function formatConstraints(profile: FullUserProfile): string {
   if (profile.allergies.length > 0) {
     lines.push('\n## Allergies (MUST AVOID):')
     profile.allergies.forEach((a) => {
-      lines.push(`- ${a.name} (${a.severity === 'STRICT' ? 'STRICT — absolute avoidance' : 'MILD — minimize'})`)
+      lines.push(`- ${a.name} (${a.severity === 'STRICT' ? 'STRICT - absolute avoidance' : 'MILD - minimize'})`)
     })
   }
 
@@ -93,7 +93,7 @@ function formatConstraints(profile: FullUserProfile): string {
 export function buildMealPlanPrompt(profile: FullUserProfile): { system: string; user: string } {
   const constraints = formatConstraints(profile)
 
-  const user = `Generate a complete weekly meal plan (Monday through Sunday) with 4 meals per day (Breakfast, Lunch, Dinner, Snack) — 28 meals total.
+  const user = `Generate a complete weekly meal plan (Monday through Sunday) with 4 meals per day (Breakfast, Lunch, Dinner, Snack) - 28 meals total.
 
 Here are my dietary profile and constraints:
 

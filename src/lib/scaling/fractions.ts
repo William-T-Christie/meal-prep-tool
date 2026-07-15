@@ -52,7 +52,7 @@ export function toFraction(value: number): string {
     return whole > 0 ? `${whole} ${bestMatch}` : bestMatch
   }
 
-  // No close fraction match — round to 1 decimal
+  // No close fraction match - round to 1 decimal
   const rounded = Math.round(value * 10) / 10
   return whole > 0 ? String(rounded) : String(rounded)
 }
