@@ -1,0 +1,352 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ──────────────────────────────────────────────
+// NextAuth required models
+// ──────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime? @map("email_verified")
+  image         String?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  accounts            Account[]
+  sessions            Session[]
+  profile             Profile?
+  allergies           Allergy[]
+  dietaryRestrictions DietaryRestriction[]
+  cuisinePreferences  CuisinePreference[]
+  cookingPreferences  CookingPreference[]
+  macroGoals          MacroGoal[]
+  kitchenEquipment    KitchenEquipment[]
+  recipes             Recipe[]
+  mealPlans           MealPlan[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ──────────────────────────────────────────────
+// Domain models — Phase 1
+// ──────────────────────────────────────────────
+
+model Profile {
+  id                  String       @id @default(cuid())
+  userId              String       @unique @map("user_id")
+  cookingSkill        CookingSkill @default(BEGINNER) @map("cooking_skill")
+  budgetWeekly        Float?       @map("budget_weekly")
+  householdSize       Int          @default(1) @map("household_size")
+  onboardingCompleted Boolean      @default(false) @map("onboarding_completed")
+  createdAt           DateTime     @default(now()) @map("created_at")
+  updatedAt           DateTime     @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("profiles")
+}
+
+enum CookingSkill {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+model Allergy {
+  id        String          @id @default(cuid())
+  userId    String          @map("user_id")
+  name      String
+  severity  AllergySeverity @default(STRICT)
+  createdAt DateTime        @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, name])
+  @@map("allergies")
+}
+
+enum AllergySeverity {
+  STRICT
+  MILD
+}
+
+model DietaryRestriction {
+  id        String      @id @default(cuid())
+  userId    String      @map("user_id")
+  type      DietaryType
+  createdAt DateTime    @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, type])
+  @@map("dietary_restrictions")
+}
+
+enum DietaryType {
+  VEGAN
+  VEGETARIAN
+  PESCATARIAN
+  KETO
+  PALEO
+  GLUTEN_FREE
+  DAIRY_FREE
+  LOW_SODIUM
+  HALAL
+  KOSHER
+}
+
+model CuisinePreference {
+  id         String                 @id @default(cuid())
+  userId     String                 @map("user_id")
+  cuisine    String
+  preference CuisinePreferenceLevel
+  createdAt  DateTime               @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, cuisine])
+  @@map("cuisine_preferences")
+}
+
+enum CuisinePreferenceLevel {
+  LOVE
+  LIKE
+  NEUTRAL
+  DISLIKE
+}
+
+model CookingPreference {
+  id             String   @id @default(cuid())
+  userId         String   @map("user_id")
+  mealType       MealType @map("meal_type")
+  maxTimeMinutes Int      @map("max_time_minutes")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, mealType])
+  @@map("cooking_preferences")
+}
+
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+  SNACK
+}
+
+model MacroGoal {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  mealType  MealType @map("meal_type")
+  calories  Int
+  proteinG  Float    @map("protein_g")
+  carbsG    Float    @map("carbs_g")
+  fatG      Float    @map("fat_g")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, mealType])
+  @@map("macro_goals")
+}
+
+model KitchenEquipment {
+  id            String   @id @default(cuid())
+  userId        String   @map("user_id")
+  equipmentName String   @map("equipment_name")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, equipmentName])
+  @@map("kitchen_equipment")
+}
+
+// ──────────────────────────────────────────────
+// Recipe models — Phase 2
+// ──────────────────────────────────────────────
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+model Recipe {
+  id               String     @id @default(cuid())
+  userId           String     @map("user_id")
+  title            String
+  description      String?    @db.Text
+  prepTimeMinutes  Int        @map("prep_time_minutes")
+  cookTimeMinutes  Int        @map("cook_time_minutes")
+  totalTimeMinutes Int        @map("total_time_minutes")
+  baseServings     Int        @map("base_servings")
+  difficulty       Difficulty @default(EASY)
+  cuisineType      String?    @map("cuisine_type")
+  imageUrl         String?    @map("image_url")
+  sourceUrl        String?    @map("source_url")
+  isAiGenerated    Boolean    @default(false) @map("is_ai_generated")
+  createdAt        DateTime   @default(now()) @map("created_at")
+  updatedAt        DateTime   @updatedAt @map("updated_at")
+
+  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ingredients   RecipeIngredient[]
+  instructions  RecipeInstruction[]
+  tags          RecipeTag[]
+  nutrition     RecipeNutrition?
+  mealPlanMeals MealPlanMeal[]
+
+  @@unique([userId, title])
+  @@index([userId])
+  @@index([totalTimeMinutes])
+  @@map("recipes")
+}
+
+model RecipeIngredient {
+  id         String  @id @default(cuid())
+  recipeId   String  @map("recipe_id")
+  quantity   Float?
+  unit       String?
+  name       String
+  notes      String?
+  orderIndex Int     @map("order_index")
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId])
+  @@map("recipe_ingredients")
+}
+
+model RecipeInstruction {
+  id              String @id @default(cuid())
+  recipeId        String @map("recipe_id")
+  stepNumber      Int    @map("step_number")
+  instructionText String @map("instruction_text") @db.Text
+  durationMinutes Int?   @map("duration_minutes")
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId])
+  @@map("recipe_instructions")
+}
+
+model RecipeTag {
+  id       String @id @default(cuid())
+  recipeId String @map("recipe_id")
+  tagName  String @map("tag_name")
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@unique([recipeId, tagName])
+  @@index([tagName])
+  @@map("recipe_tags")
+}
+
+model RecipeNutrition {
+  id                 String @id @default(cuid())
+  recipeId           String @unique @map("recipe_id")
+  caloriesPerServing Int    @map("calories_per_serving")
+  proteinG           Float  @map("protein_g")
+  carbsG             Float  @map("carbs_g")
+  fatG               Float  @map("fat_g")
+  fiberG             Float? @map("fiber_g")
+  sugarG             Float? @map("sugar_g")
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@map("recipe_nutrition")
+}
+
+// ──────────────────────────────────────────────
+// Meal Plan models — Phase 3
+// ──────────────────────────────────────────────
+
+enum MealPlanStatus {
+  GENERATING
+  READY
+  FAILED
+}
+
+model MealPlan {
+  id             String         @id @default(cuid())
+  userId         String         @map("user_id")
+  title          String
+  weekStartDate  DateTime       @map("week_start_date") @db.Date
+  status         MealPlanStatus @default(GENERATING)
+  constraintHash String         @map("constraint_hash")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  user  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  meals MealPlanMeal[]
+
+  @@index([userId])
+  @@index([constraintHash])
+  @@map("meal_plans")
+}
+
+model MealPlanMeal {
+  id         String   @id @default(cuid())
+  mealPlanId String   @map("meal_plan_id")
+  recipeId   String   @map("recipe_id")
+  dayIndex   Int      @map("day_index")
+  mealType   MealType @map("meal_type")
+
+  mealPlan MealPlan @relation(fields: [mealPlanId], references: [id], onDelete: Cascade)
+  recipe   Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@unique([mealPlanId, dayIndex, mealType])
+  @@index([mealPlanId])
+  @@map("meal_plan_meals")
+}

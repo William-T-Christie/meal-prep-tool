@@ -10,7 +10,14 @@
       "Bash(pnpm add:*)",
       "Bash(pnpm approve-builds:*)",
       "Bash(pnpm install:*)",
-      "Bash(pnpm dlx:*)"
+      "Bash(pnpm dlx:*)",
+      "Bash(timeout 15 pnpm dev)",
+      "Bash(pnpm test:*)",
+      "Bash(npx tsc:*)",
+      "Bash(wc -l /Users/williamchristie/Documents/Claude/Projects/meal-prep-tool-V2/src/app/recipes/*.tsx /Users/williamchristie/Documents/Claude/Projects/meal-prep-tool-V2/src/app/recipes/*/*.tsx /Users/williamchristie/Documents/Claude/Projects/meal-prep-tool-V2/src/app/recipes/*/*/*.tsx)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(openssl rand:*)",
+      "Bash(node -e \"console.log\\(require\\('crypto'\\).randomBytes\\(32\\).toString\\('base64'\\)\\)\")"
     ]
   }
 }

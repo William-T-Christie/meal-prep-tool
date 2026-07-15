@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Meal Prep Tool
 
-## Getting Started
+An AI-powered meal planner that turns a dietary profile into a full week of meals, scaled recipes, and a consolidated shopping list. You set your constraints once — allergies, macros, budget, time, equipment — and the app generates a plan that respects all of them at once.
 
-First, run the development server:
+The guiding principle is **maximum automation, minimum friction**.
+
+> Status: active development. Core app, data model, and UI are built out across the flows below; not yet deployed publicly.
+
+## What it does
+
+- **Profile & preferences** — dietary restrictions, allergies, cuisine likes/dislikes, skill level, per-meal time limits, weekly budget, and available kitchen equipment.
+- **AI meal-plan generation** — generates a balanced week from your profile in one pass, swaps individual meals while keeping the plan balanced, and favors meals that reuse ingredients to cut waste and cost.
+- **Recipe library** — searchable, filterable store; save AI-generated recipes or add your own; tag, rate, and note after cooking.
+- **Dynamic serving adjustment** — change a serving size and ingredient quantities, the shopping list, and instructions all scale, with sensible fractional rounding.
+- **Shopping list** — auto-built from the active plan, consolidated across meals, grouped by aisle, and checkable while you shop.
+- **Cooking mode** — a phone-friendly, step-by-step view with large text and built-in timers.
+
+## Stack
+
+| Layer | Choice |
+|---|---|
+| Framework | Next.js (App Router) + React, TypeScript (strict) |
+| UI | Tailwind CSS + shadcn/ui |
+| Server state | TanStack Query |
+| Database | PostgreSQL via Prisma |
+| Auth | NextAuth.js |
+| AI | Claude API (Anthropic SDK), structured JSON output validated with Zod |
+| Testing | Vitest (unit) + Playwright (E2E) |
+
+## How the AI layer works
+
+Meal-plan generation is the core. The user's full constraint set (allergies, macros, budget, time, preferences) is sent as system context, and the model is asked for **structured JSON** — a meals array with ingredients, macros, and instructions. Every response is validated against a Zod schema before it's stored or shown; if validation fails it retries once with a correction prompt, then surfaces a clean error. Generations are cached by a hash of the constraints to avoid redundant API calls.
+
+The hard parts — and why they're interesting — are reliable constraint satisfaction (macros + budget + time + allergies simultaneously), mapping free-text ingredient names to real nutrition data, and non-linear recipe scaling (you don't double the bake time when you double the recipe).
+
+## Run it locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+cp .env.example .env.local   # fill in the values below
+pnpm prisma migrate dev      # set up the database
+pnpm dev                     # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Environment variables (`.env.local`):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+DATABASE_URL=        # PostgreSQL connection string
+NEXTAUTH_SECRET=     # NextAuth session secret
+NEXTAUTH_URL=        # http://localhost:3000 in dev
+AI_API_KEY=          # Claude API key
+NUTRITION_API_KEY=   # USDA FoodData Central (or Edamam)
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project layout
 
-## Learn More
+```
+src/
+├── app/            # App Router pages: auth, dashboard, recipes, meal-plan, shopping, cook, settings
+├── components/     # ui/ (shadcn primitives) + features/ (feature components)
+├── lib/            # ai/ (prompts, schemas, validation), nutrition/, scaling/, db.ts
+├── server/         # server-only services and route handlers
+└── types/          # shared TypeScript types
+prisma/             # schema, migrations, seed data
+tests/              # Vitest + Playwright
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+<sub>Built by William Christie. Personal project.</sub>
