@@ -12,7 +12,7 @@ A web app for automated meal planning. Users set dietary profiles and constraint
 - **Database:** PostgreSQL via Prisma ORM
 - **Auth:** NextAuth.js
 - **AI:** Claude API (Anthropic SDK) with structured JSON output
-- **Nutrition Data:** USDA FoodData Central API (TBD — Edamam as backup)
+- **Nutrition Data:** USDA FoodData Central API (TBD, Edamam as backup)
 - **Deployment:** Vercel + Neon (managed PostgreSQL)
 - **Server State:** TanStack Query (React Query)
 - **Testing:** Vitest (unit), Playwright (E2E)
