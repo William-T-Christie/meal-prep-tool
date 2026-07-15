@@ -29,7 +29,7 @@ A meal planner that turns a dietary profile into a full week of meals, scaled re
 
 Generating a plan is the core of the app. It sends the user's full set of constraints (allergies, macros, budget, time, preferences) as context and asks the model for structured JSON: a list of meals with ingredients, macros, and instructions. Every response gets checked against a Zod schema before it's stored or shown. If the check fails it retries once with a correction prompt, then shows a clean error. Plans are cached by a hash of the constraints so the same request doesn't hit the API twice.
 
-The parts that took the most thought were keeping all the constraints satisfied at once (macros plus budget plus time plus allergies), matching free-text ingredient names to real nutrition data, and scaling recipes correctly (you don't double the bake time when you double the recipe).
+The parts that take the most thought are keeping all the constraints satisfied at once (macros plus budget plus time plus allergies), scaling recipes correctly (you don't double the bake time when you double the recipe), and mapping free-text ingredient names to real nutrition data (a planned integration).
 
 ## Run it locally
 

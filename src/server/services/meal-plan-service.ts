@@ -174,8 +174,6 @@ export async function generateMealPlan(userId: string, weekStartDate: Date) {
       })
     })
 
-    console.log(`[AI] Meal plan generated. Input: ${result.usage.inputTokens}, Output: ${result.usage.outputTokens}`)
-
     // Return the full plan
     return prisma.mealPlan.findUniqueOrThrow({
       where: { id: mealPlan.id },
